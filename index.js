@@ -3,58 +3,56 @@
 
 'use strict';
 
-require('sugar');
-
-var jade = require('jade')
+var clog = require('clog')
   , fs = require('fs')
-  , clog = require('clog')
   , optimist = require('optimist')
-    .usage('Create HTML i18n templates.\nUsage: $0 tests/template.jade [--translated tests/locale/it.json] [--output tests/output]')
-    .describe('translated', 'File with translated strings')
+    .usage('Create HTML i18n templates.\nUsage: $0 tests/template.jade [--translations tests/locale/it.json] [--output .]')
+    .describe('translations', 'File with translations strings')
     .describe('output', 'Output directory (must exist)')
-    .describe('h', 'Print this help')
     .describe('init', 'Create an initial translation file')
-    .default({ translated: 'locale/' + process.env.LANG + '.json', output: '.' })
-    .alias('t', 'translated')
+    .describe('update', 'Update the translation file with new strings that may have been added')
+    .describe('h', 'Print this help')
+    .boolean('init')
+    .boolean('update')
+    .default({ translations: 'locale/' + process.env.LANG + '.json', output: 'output.html' })
+    .alias('t', 'translations')
     .alias('o', 'output')
     .alias('h', 'help')
-  , argv = optimist.argv;
+  , argv = optimist.argv
+  , i18n = require('./lib/i18n.js');
 
 
+// - Print help
 if (argv.h) {
   optimist.showHelp();
   process.exit(1);
 }
 
+// - Create translation file if requested
 if (argv.init) {
-  fs.writeFileSync(argv.translated, '{}');
+  i18n.init(argv.translations);
 }
 
-var translated = JSON.parse(fs.readFileSync(argv.translated))
-  , source = fs.readFileSync(argv._[0]);
+
+var source = fs.readFileSync(argv._[0])
+  , strings = JSON.parse(fs.readFileSync(argv.translations))
+  , res = i18n.compile(source, strings)
+  , compiled = res[0]
+  , strings_updated = res[1];
 
 
-jade.filters.trans = function (str, params) {
-  var ctx = params.context;
+// Write compiled file
+if (argv.output === '-') {
+  process.stdout.write(compiled);
+} else {
+  fs.writeFileSync(argv.output, compiled);
+}
+
+
+// Update translation file
+if (argv.update) {
+  console.log('updating strings...');
   
-  if (translated[ctx] != null) {
-    if (str !== translated[ctx].original) {
-      translated[ctx].original = str;
-      translated[ctx].fuzzy = true;
-    }
-    return translated[ctx].translated;
-  } else {
-    console.log('Missing translation for ' + str);
-    translated[ctx] = {
-      original: str,
-      translated: str,
-      fuzzy: true
-    };
-    return '';
-  }
-};
-
-var page = jade.compile(source)();
-
-fs.writeFileSync('output.html', page);
-fs.writeFileSync(argv.translated, JSON.stringify(translated));
+} else {
+  clog.info('If you have missing translations you can run this script with the --update flag.');
+}
