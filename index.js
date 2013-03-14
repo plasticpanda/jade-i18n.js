@@ -63,6 +63,8 @@ var _compile = function (sourceFile, locale) {
     if (argv.init) {
       clog.warn('Creating empty translation file for `{0}`'.format(transFileName));
       i18n.init(transFileName, true);
+      strings = fs.readFileSync(transFileName);
+      strings = JSON.parse(strings);
     } else {
       clog.error('Aborting due to previous warning. Run with --init to create or overwrite this file.');
       throw err;
