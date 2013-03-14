@@ -38,11 +38,11 @@ p
 
 3. Give the locale files generated in ../locale/ to your translator and wait :P
 	
-	```json
+	```js
 	{
 		"MY-DEMO": { /* Context name (all uppercase - don't change this) */
 			"original": "It's me,", /* Original string, for reference only */
-			"translated": "Sono io," /* Translated string */
+			"translated": "Sono io,", /* Translated string */
 			"fuzzy": true /* true if this string is not translated yet */
 		},
 		...

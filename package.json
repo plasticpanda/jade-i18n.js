@@ -1,8 +1,11 @@
 {
-  "name": "i18n-site-generator",
+  "name": "jade-i18n.js",
   "version": "0.0.1",
-  "description": "Static i18n site generator",
-  "main": "index.js",
+  "description": "Static i18-d website generator",
+  "main": "jade-i18n.js",
+  "bin": {
+    "jade-i18n.js": "./jade-i18n.js"
+  },
   "dependencies": {
     "jade": "~0.28.2",
     "i18n": "~0.3.8",
@@ -18,12 +21,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@bitbucket.org/plasticpanda/i18n-site-generator.git"
+    "url": "https://github.com/PlasticPanda/li.i18n.git"
   },
   "keywords": [
     "i18n",
     "jade"
   ],
   "author": "Plastic Panda",
-  "license": "BSD"
+  "license": "MIT"
 }
