@@ -3,19 +3,28 @@
 
 'use strict';
 
+require('sugar');
+require('string-format');
+
 var clog = require('clog')
   , fs = require('fs')
+  , mkdirp = require('mkdirp')
   , optimist = require('optimist')
-    .usage('Create HTML i18n templates.\nUsage: $0 tests/template.jade [--translations tests/locale/it.json]')
-    .describe('translations', 'File with translations strings')
-    .describe('init', 'Create an initial translation file')
-    .describe('update', 'Update the translation file with new strings that may have been added')
-    .describe('h', 'Print this help')
+    .usage('Create HTML i18n templates.\nUsage: $0 tests/template.jade [-L locale/] -l it,en [-o ./] [--init] [--update]')
+    .describe('locale-dir', 'Directory where to find translated files')
+    .describe('locales', 'Locales to use')
+    .describe('output', 'Output directory (must exist). Use a trailing slash.')
+    .describe('init', 'Create missing locale files')
+    .describe('update', 'Update (overwrites) the locale files')
+    .describe('help', 'Print this help')
+    .alias('L', 'locale-dir')
+    .alias('l', 'locales')
+    .alias('o', 'output')
+    .alias('h', 'help')
     .boolean('init')
     .boolean('update')
-    .default({ translations: 'locale/' + process.env.LANG + '.json', update: false })
-    .alias('t', 'translations')
-    .alias('h', 'help')
+    .default({ 'locale-dir': 'locale/', update: false, output: './' })
+    .demand(['locales'])
   , argv = optimist.argv
   , i18n = require('./lib/i18n.js');
 
@@ -26,28 +35,67 @@ if (argv.h) {
   process.exit(1);
 }
 
-// - Create translation file if requested
-if (argv.init) {
-  i18n.init(argv.translations);
-}
+
+// // - Create translation file if requested
+// if (argv.init) {
+//   i18n.init(argv.output);
+// }
 
 
-var sourceFile = argv._[0]
-  , source = fs.readFileSync(sourceFile)
-  , strings = JSON.parse(fs.readFileSync(argv.translations))
-  , res = i18n.compile(source, strings)
-  , compiled = res[0]
-  , strings_updated = res[1];
+var _compile = function (locale) {
+  var sourceFile = argv._[0]
+    , source = fs.readFileSync(sourceFile)
+    , outputFileName = argv.output + locale + '/' + sourceFile.replace('.jade', '.html')
+    , transFileName = argv['locale-dir'] + locale + '.json'
+    , strings
+    , res
+    , compiled
+    , strings_updated;
+
+  clog.info('');
+  clog.info('Compiling `{0}` with locale `{1}`...'.format(sourceFile, transFileName));
+  
+  try {
+    strings = fs.readFileSync(transFileName);
+    strings = JSON.parse(strings);
+  } catch (err) {
+    clog.warn('Translation file `{0}` does not exists or is not a valid JSON file.'.format(transFileName));
+    
+    if (argv.init) {
+      clog.warn('Creating empty translation file for `{0}`'.format(transFileName));
+      i18n.init(transFileName, true);
+    } else {
+      clog.error('Aborting due to previous warning. Run with --init to create or overwrite this file.');
+      throw err;
+    }
+  }
+  
+  res = i18n.compile(source, strings);
+  compiled = res[0];
+  strings_updated = res[1];
+
+  // Update translation file
+  if (argv.update) {
+    fs.writeFileSync(transFileName, JSON.stringify(strings_updated));
+    clog.info('Updated locale file `{0}`.'.format(transFileName));
+  } else {
+    clog.info('If you have missing translations you can run this script with the --update flag.');
+  }
+  
+  if (!fs.existsSync(outputFileName.to(outputFileName.lastIndexOf('/')))) {
+    mkdirp.sync(outputFileName.to(outputFileName.lastIndexOf('/')));
+  }
+  
+  fs.writeFileSync(outputFileName, compiled + '\n');
+  clog.info('Written `{0}`.'.format(outputFileName));
+};
 
 
-// Update translation file
-if (argv.update) {
-  fs.writeFileSync(argv.translations, JSON.stringify(strings_updated));
-  clog.debug('Translations file updated.');
+if (argv.locales.indexOf(',') > -1) {
+  argv.locales.split(',').forEach(_compile);
 } else {
-  clog.info('If you have missing translations you can run this script with the --update flag.');
+  _compile(argv.locales);
 }
 
 
-process.stdout.write(compiled + '\n');
 clog.info('OK');

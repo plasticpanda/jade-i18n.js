@@ -9,7 +9,8 @@
     "sugar": "~1.3.8",
     "optimist": "~0.3.5",
     "string-format": "~0.2.1",
-    "clog": "git://github.com/PlasticPanda/clog.git"
+    "clog": "git://github.com/PlasticPanda/clog.git",
+    "mkdirp": "~0.3.5"
   },
   "devDependencies": {},
   "scripts": {
