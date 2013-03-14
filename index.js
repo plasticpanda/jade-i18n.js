@@ -42,9 +42,8 @@ if (argv.h) {
 // }
 
 
-var _compile = function (locale) {
-  var sourceFile = argv._[0]
-    , source = fs.readFileSync(sourceFile)
+var _compile = function (sourceFile, locale) {
+  var source = fs.readFileSync(sourceFile)
     , outputFileName = argv.output + locale + '/' + sourceFile.replace('.jade', '.html')
     , transFileName = argv['locale-dir'] + locale + '.json'
     , strings
@@ -91,10 +90,17 @@ var _compile = function (locale) {
 };
 
 
+var _compileMany = function (locale) {
+  argv._.forEach(function (source) {
+    _compile(source, locale);
+  });
+};
+
+
 if (argv.locales.indexOf(',') > -1) {
-  argv.locales.split(',').forEach(_compile);
+  argv.locales.split(',').forEach(_compileMany);
 } else {
-  _compile(argv.locales);
+  _compileMany(argv.locales);
 }
 
 
