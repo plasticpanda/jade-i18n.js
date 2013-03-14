@@ -3,7 +3,7 @@ Compiles Jade templates in multiple languages using a JSON file for the translat
 
 
 ```bash
-npm-install -g jade-i18n.js
+npm install -g jade-i18n.js
 jade-i18n.js --help
 ```
 
