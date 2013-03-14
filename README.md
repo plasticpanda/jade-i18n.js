@@ -1,4 +1,4 @@
-# i18n.li - Static i18-d website generator #
+# jade-i18n.js - Static i18-d website generator #
 Compiles Jade templates in multiple languages using a JSON file for the translations.
 
 
