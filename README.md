@@ -40,10 +40,10 @@ p
 	
 	```json
 	{
-		"MY-DEMO": { # Context name (all uppercase - don't change this)
-			"original": "It's me,", # Original string, for reference only
-			"translated": "Sono io," # Translated string
-			"fuzzy": true # true if this string is not translated yet
+		"MY-DEMO": { // Context name (all uppercase - don't change this)
+			"original": "It's me,", // Original string, for reference only
+			"translated": "Sono io," // Translated string
+			"fuzzy": true // true if this string is not translated yet
 		},
 		...
 	}
