@@ -37,6 +37,7 @@ p
 	```
 
 3. Give the locale files generated in ../locale/ to your translator and wait :P
+	We've built a tool, [i18n.li](http://www.i18n.li/) to help human beings to translate this format.
 	
 	```js
 	{
@@ -118,7 +119,9 @@ jade-i18n.js tests/*.jade -L tests/locale/ -l en,it,de,fr,gr -o output/ --init -
 ```
 
 ## Todo ##
-Create a web tool to edit locale files.
+* Tests
+* Tests
+* Tests
 
 
 ## License (MIT) ##
