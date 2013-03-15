@@ -37,7 +37,8 @@ p
 	```
 
 3. Give the locale files generated in ../locale/ to your translator and wait :P
-	We've built a tool, [i18n.li](http://www.i18n.li/) to help human beings to translate this format.
+
+	**PS:** We've built a tool, [i18n.li](http://www.i18n.li/) to help human beings to translate this format.
 	
 	```js
 	{
