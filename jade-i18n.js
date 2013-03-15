@@ -71,7 +71,10 @@ var _compile = function (sourceFile, locale) {
     }
   }
   
-  res = i18n.compile(source, strings);
+  res = i18n.compile(source, strings, {
+    filename: sourceFile,
+    rootpath: sourceFile.to(sourceFile.lastIndexOf('/'))
+  });
   compiled = res[0];
   strings_updated = res[1];
 
