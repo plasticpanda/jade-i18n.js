@@ -1,6 +1,8 @@
 # jade-i18n.js - Static i18-d website generator #
 Compiles Jade templates in multiple languages using a JSON file for the translations.
 
+**Status:** usable
+
 
 ```bash
 npm install -g jade-i18n.js
