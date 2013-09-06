@@ -1,6 +1,6 @@
 {
   "name": "jade-i18n.js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Static i18-d website generator",
   "main": "jade-i18n.js",
   "bin": {
@@ -12,10 +12,9 @@
     "sugar": "~1.3.8",
     "optimist": "~0.3.5",
     "string-format": "~0.2.1",
-    "clog": "git://github.com/PlasticPanda/clog.git",
     "mkdirp": "~0.3.5",
-    "coolog": "~2.1.2",
-    "marked": "~0.2.9"
+    "marked": "~0.2.9",
+    "clog": "~0.1.6"
   },
   "devDependencies": {},
   "scripts": {
