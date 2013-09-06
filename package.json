@@ -1,6 +1,6 @@
 {
   "name": "jade-i18n.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Static i18-d website generator",
   "main": "jade-i18n.js",
   "bin": {
