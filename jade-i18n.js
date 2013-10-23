@@ -13,16 +13,19 @@ var clog = require('clog')
     .usage('Create HTML i18n templates.\nUsage: $0 tests/template.jade [-L locale/] -l it,en [-o ./] [--init] [--update]')
     .describe('locale-dir', 'Directory where to find translated files')
     .describe('locales', 'Locales to use')
-    .describe('output', 'Output directory (must exist). Use a trailing slash.')
+    .describe('output', 'Output directory if --compile (must exist). Use a trailing slash.')
+    .describe('no-compile', 'Wheter to compile jade to html (if set only json locale files will be created)')
     .describe('init', 'Create missing locale files')
     .describe('update', 'Update (overwrites) the locale files')
     .describe('help', 'Print this help')
     .alias('L', 'locale-dir')
     .alias('l', 'locales')
     .alias('o', 'output')
+    .alias('n', 'no-compile')
     .alias('h', 'help')
     .boolean('init')
     .boolean('update')
+    .boolean('compile')
     .default({ 'locale-dir': 'locale/', update: false, output: './' })
     .demand(['locales'])
   , argv = optimist.argv
@@ -86,12 +89,14 @@ var _compile = function (sourceFile, locale) {
     clog.info('If you have missing translations you can run this script with the --update flag.');
   }
   
-  if (!fs.existsSync(outputFileName.to(outputFileName.lastIndexOf('/')))) {
-    mkdirp.sync(outputFileName.to(outputFileName.lastIndexOf('/')));
+  if (!argv['no-compile']) {
+    if (!fs.existsSync(outputFileName.to(outputFileName.lastIndexOf('/')))) {
+      mkdirp.sync(outputFileName.to(outputFileName.lastIndexOf('/')));
+    }
+    
+    fs.writeFileSync(outputFileName, compiled + '\n');
+    clog.info('Written `{0}`.'.format(outputFileName));
   }
-  
-  fs.writeFileSync(outputFileName, compiled + '\n');
-  clog.info('Written `{0}`.'.format(outputFileName));
 };
 
 

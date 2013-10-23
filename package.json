@@ -1,6 +1,6 @@
 {
   "name": "jade-i18n.js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Static i18-d website generator",
   "main": "jade-i18n.js",
   "bin": {
@@ -14,7 +14,9 @@
     "string-format": "~0.2.1",
     "mkdirp": "~0.3.5",
     "marked": "~0.2.9",
-    "clog": "~0.1.6"
+    "clog": "~0.1.6",
+    "async": "~0.2.9",
+    "node-swallow": "0.0.3"
   },
   "devDependencies": {},
   "scripts": {
