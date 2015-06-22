@@ -83,7 +83,7 @@ var _compile = function (sourceFile, locale) {
 
   // Update translation file
   if (argv.update) {
-    fs.writeFileSync(transFileName, JSON.stringify(strings_updated));
+    fs.writeFileSync(transFileName, JSON.stringify(strings_updated, null, 2));
     clog.info('Updated locale file `{0}`.'.format(transFileName));
   } else {
     clog.info('If you have missing translations you can run this script with the --update flag.');
